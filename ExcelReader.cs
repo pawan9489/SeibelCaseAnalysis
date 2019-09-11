@@ -23,7 +23,8 @@ namespace SeibelCases {
                 } else {
                     res.value = c.NumericCellValue;
                 }
-            } else {
+            } else if (c.CellType == NPOI.SS.UserModel.CellType.String) {
+                // System.Console.WriteLine($"{c.RowIndex} - {c.ColumnIndex}");
                 res.str = c.StringCellValue;
             }
             return (c.CellType, res);
@@ -77,7 +78,14 @@ namespace SeibelCases {
                             ICell c = (ICell) cit.Current;
                             if (columnIndexesToCollectData.Contains (c.ColumnIndex)) {
                                 var (cellType, content) = ExcelReader.ParseCellContent (c);
-                                res.Add ((cellType, content, cellType == NPOI.SS.UserModel.CellType.Numeric ? DateUtil.IsCellDateFormatted (c) : false));
+                                if (cellType == NPOI.SS.UserModel.CellType.Numeric) {
+                                    if (DateUtil.IsCellDateFormatted (c))
+                                        res.Add((cellType, content, true));
+                                    else
+                                        res.Add((cellType, content, false));
+                                } else if (cellType == NPOI.SS.UserModel.CellType.String) {
+                                    res.Add ((cellType, content, false));
+                                }
                             }
                         }
                         yield return res;
