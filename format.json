@@ -1,0 +1,46 @@
+{
+    "productName": "iHCM",
+    "areas": [
+        {
+            "area": "Leave and Absence",
+            "categories": [
+                {
+                    "name": "Sick",
+                    "locale": "en-GB",
+                    "aliases": [
+                        {
+                            "name": "ziek",
+                            "locale": "nl-NL"
+                        },
+                        {
+                            "name": "krank",
+                            "locale": "de-DE"
+                        }
+                    ]
+                },
+                {
+                    "name": "Leave",
+                    "locale": "en-GB",
+                    "aliases": [
+                        {
+                            "name": "verlof",
+                            "locale": "nl-NL"
+                        }
+                    ]
+                }
+            ],
+            "subcategories": [
+                {
+                    "name": "Payment",
+                    "locale": "en-GB",
+                    "aliases": [
+                        {
+                            "name": "verlof",
+                            "locale": "nl-NL"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
