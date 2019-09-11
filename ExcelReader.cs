@@ -8,7 +8,7 @@ using NPOI.XSSF.UserModel;
 
 namespace SeibelCases {
     public class ExcelReader {
-        private struct DateOrDoubleOrString {
+        public struct DateOrDoubleOrString {
             public DateTime date;
             public string str;
             public double value;
@@ -28,7 +28,29 @@ namespace SeibelCases {
             }
             return (c.CellType, res);
         }
-        public static IEnumerable<string> GetSummariesOfEachRow (string filepath, string sheetname) {
+        private static List<string> ExtractHeadings (IRow row, int columnCount) {
+            var headings = new List<string> (columnCount);
+            for (IEnumerator cit = row.GetEnumerator (); cit.MoveNext ();) {
+                ICell c = (ICell) cit.Current;
+                var (cellType, content) = ExcelReader.ParseCellContent (c);
+                if (cellType == NPOI.SS.UserModel.CellType.String) {
+                    var columnValue = content.str;
+                    headings.Add (columnValue.ToLower ());
+                } else
+                    throw new Exception ("Excel Header must Contain only String Formatted Cells.");
+            }
+            return headings;
+        }
+        private static bool IsEmpty (IRow row) {
+            for (IEnumerator cit = row.GetEnumerator (); cit.MoveNext ();) {
+                ICell c = (ICell) cit.Current;
+                if (c.CellType != NPOI.SS.UserModel.CellType.Blank) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static IEnumerable < IEnumerable < (CellType, DateOrDoubleOrString, bool) >> GetColumnsOfEachRow (string filepath, string sheetname, List<string> columnName) {
             using (var fs = new FileStream (filepath, FileMode.Open, FileAccess.Read)) {
                 IWorkbook workbook = new XSSFWorkbook (fs);
                 ISheet sheet = workbook.GetSheet (sheetname);
@@ -36,40 +58,46 @@ namespace SeibelCases {
                 var rowCount = sheet.LastRowNum;
                 var firstRow = sheet.GetRow (0);
                 var columnCount = firstRow.LastCellNum;
-                var headings = new List<string> (columnCount);
-                var summaryColumn = -1;
-
+                var headings = new List<string> ();
+                var columnIndexesToCollectData = new List<int> ();
                 for (int i = 0; i <= rowCount; i++) {
                     var row = sheet.GetRow (i);
-                    for (IEnumerator cit = row.GetEnumerator (); cit.MoveNext ();) {
-                        ICell c = (ICell) cit.Current;
-                        var (cellType, content) = ExcelReader.ParseCellContent (c);
-                        if (i == 0) { // Headings
-                            if (cellType == NPOI.SS.UserModel.CellType.String) {
-                                var columnValue = content.str;
-                                headings.Add (columnValue);
-                                if (columnValue.ToLower () == "summary") {
-                                    summaryColumn = c.ColumnIndex;
-                                }
-                            } else
-                                throw new Exception ("Excel Header must Contain only String Formatted Cells.");
-                            continue;
-                        }
-                        if (c.ColumnIndex == summaryColumn) {
-                            var cellContent = "";
-                            if (cellType == NPOI.SS.UserModel.CellType.Numeric) {
-                                if (DateUtil.IsCellDateFormatted (c))
-                                    cellContent = content.date.ToString ();
-                                else
-                                    cellContent = content.value.ToString ();
-                            } else {
-                                cellContent = content.str;
+                    if (i == 0) { // Headings
+                        headings = ExtractHeadings (row, columnCount);
+                        foreach (var colName in columnName) {
+                            var ci = headings.IndexOf (colName.ToLower ());
+                            columnIndexesToCollectData.Add (ci);
+                            if (ci == -1) {
+                                throw new Exception ($"There is no Column with Name '{colName}'");
                             }
-                            yield return cellContent;
                         }
+                    } else if (!IsEmpty (row)) {
+                        var res = new List < (CellType, DateOrDoubleOrString, bool) > ();
+                        for (IEnumerator cit = row.GetEnumerator (); cit.MoveNext ();) {
+                            ICell c = (ICell) cit.Current;
+                            if (columnIndexesToCollectData.Contains (c.ColumnIndex)) {
+                                var (cellType, content) = ExcelReader.ParseCellContent (c);
+                                res.Add ((cellType, content, cellType == NPOI.SS.UserModel.CellType.Numeric ? DateUtil.IsCellDateFormatted (c) : false));
+                            }
+                        }
+                        yield return res;
                     }
                 }
             }
+        }
+
+        public static string CellToString ((CellType, DateOrDoubleOrString, bool) tuple) {
+            var (cellType, content, isCellDateFormatted) = tuple;
+            var cellContent = "";
+            if (cellType == NPOI.SS.UserModel.CellType.Numeric) {
+                if (isCellDateFormatted)
+                    cellContent = content.date.ToString ();
+                else
+                    cellContent = content.value.ToString ();
+            } else {
+                cellContent = content.str;
+            }
+            return cellContent;
         }
     }
 }
