@@ -5,7 +5,7 @@ using SeibelCases.Seibel;
 
 namespace SeibelCases {
     public class JsonReader {
-        public static void PrintJSON (string filepath) {
+        public static SeibelFormat PrintJSON (string filepath) {
             using (var fs = new FileStream (filepath, FileMode.Open, FileAccess.Read)) {
                 using (StreamReader reader = new StreamReader (fs)) {
                     var data = reader.ReadToEnd ();
@@ -13,7 +13,7 @@ namespace SeibelCases {
                         PropertyNameCaseInsensitive = true,
                         AllowTrailingCommas = true
                     };
-                    SeibelFormat obj = JsonSerializer.Deserialize<SeibelFormat>(data, options);
+                    return JsonSerializer.Deserialize<SeibelFormat> (data, options);
                 }
             }
         }
