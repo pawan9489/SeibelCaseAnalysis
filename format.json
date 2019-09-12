@@ -5,9 +5,12 @@
             "area": "Leave and Absence",
             "categories": [
                 {
-                    "name": "Sick",
-                    "locale": "en-GB",
+                    "umbrellaterm": "Sick",
                     "aliases": [
+                        {
+                            "name": "sick",
+                            "locale": "en-GB"
+                        },
                         {
                             "name": "ziek",
                             "locale": "nl-NL"
@@ -15,30 +18,288 @@
                         {
                             "name": "krank",
                             "locale": "de-DE"
+                        },
+                        {
+                            "name": "return to work",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "SSP",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "rtw",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "Absence",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "OSP",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": [
+                        {
+                            "umbrellaterm": "Payment",
+                            "aliases": [
+                                {
+                                    "name": "Payment",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "payroll",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "PDE",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "pay data",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Setup",
+                            "aliases": [
+                                {
+                                    "name": "type",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "scheme",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "package",
+                                    "locale": "en-GB"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
-                    "name": "Leave",
-                    "locale": "en-GB",
+                    "umbrellaterm": "Leave",
                     "aliases": [
+                        {
+                            "name": "leave",
+                            "locale": "en-GB"
+                        },
                         {
                             "name": "verlof",
                             "locale": "nl-NL"
                         }
+                    ],
+                    "subcategories": [
+                        {
+                            "umbrellaterm": "Payment",
+                            "aliases": [
+                                {
+                                    "name": "Payment",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "payroll",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "PDE",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "pay data",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Setup",
+                            "aliases": [
+                                {
+                                    "name": "type",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "scheme",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "package",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        }
                     ]
-                }
-            ],
-            "subcategories": [
+                },
                 {
-                    "name": "Payment",
-                    "locale": "en-GB",
+                    "umbrellaterm": "Request Leave",
                     "aliases": [
                         {
-                            "name": "verlof",
-                            "locale": "nl-NL"
+                            "name": "request leave",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "approv",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "reject",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "request log",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": []
+                },
+                {
+                    "umbrellaterm": "Parental",
+                    "aliases": [
+                        {
+                            "name": "parental",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "maternity",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "paternity",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "pregnancy",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "SMP",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "OMP",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "key fact",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "SPP",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": [
+                        {
+                            "umbrellaterm": "Payment",
+                            "aliases": [
+                                {
+                                    "name": "payment",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "payroll",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "PDE",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "pay data",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Setup",
+                            "aliases": [
+                                {
+                                    "name": "type",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "scheme",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "package",
+                                    "locale": "en-GB"
+                                }
+                            ]
                         }
                     ]
+                },
+                {
+                    "umbrellaterm": "Entitlement",
+                    "aliases": [
+                        {
+                            "name": "entitlement",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "balances",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "annual",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "Holiday",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": [
+                        {
+                            "umbrellaterm": "Payment",
+                            "aliases": [
+                                {
+                                    "name": "payment",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "payroll",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "PDE",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "pay data",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "umbrellaterm": "Calendar",
+                    "aliases": [
+                        {
+                            "name": "Kalender",
+                            "locale": "nl-NL"
+                        },
+                        {
+                            "name": "Calender",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": []
+                },
+                {
+                    "umbrellaterm": "Fix problems",
+                    "aliases": [
+                        {
+                            "name": "fix problems",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": []
                 }
             ]
         }

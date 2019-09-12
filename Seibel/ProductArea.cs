@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 namespace SeibelCases.Seibel {
     public class ProductArea {
-        public string area { get; set; }
-        public List<Tag> categories { get; set; }
-        public List<Tag> subcategories { get; set; }
+        private string _area;
+        public string area { get => _area; set => _area = value.ToLower(); }
+        public List<Category> categories { get; set; }
+
+        override public string ToString() => $"{area}";
     }
 }

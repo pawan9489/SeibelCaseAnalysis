@@ -51,7 +51,7 @@ namespace SeibelCases {
             }
             return true;
         }
-        public static IEnumerable < IEnumerable < (CellType, DateOrDoubleOrString, bool) >> GetColumnsOfEachRow (string filepath, string sheetname, List<string> columnName) {
+        public static IEnumerable < Dictionary <string, (CellType, DateOrDoubleOrString, bool) >> GetColumnsOfEachRow (string filepath, string sheetname, List<string> columnName) {
             using (var fs = new FileStream (filepath, FileMode.Open, FileAccess.Read)) {
                 IWorkbook workbook = new XSSFWorkbook (fs);
                 ISheet sheet = workbook.GetSheet (sheetname);
@@ -73,18 +73,18 @@ namespace SeibelCases {
                             }
                         }
                     } else if (!IsEmpty (row)) {
-                        var res = new List < (CellType, DateOrDoubleOrString, bool) > ();
+                        var res = new Dictionary <string, (CellType, DateOrDoubleOrString, bool) > ();
                         for (IEnumerator cit = row.GetEnumerator (); cit.MoveNext ();) {
                             ICell c = (ICell) cit.Current;
                             if (columnIndexesToCollectData.Contains (c.ColumnIndex)) {
                                 var (cellType, content) = ExcelReader.ParseCellContent (c);
                                 if (cellType == NPOI.SS.UserModel.CellType.Numeric) {
                                     if (DateUtil.IsCellDateFormatted (c))
-                                        res.Add((cellType, content, true));
+                                        res.Add(headings[c.ColumnIndex], (cellType, content, true));
                                     else
-                                        res.Add((cellType, content, false));
+                                        res.Add(headings[c.ColumnIndex], (cellType, content, false));
                                 } else if (cellType == NPOI.SS.UserModel.CellType.String) {
-                                    res.Add ((cellType, content, false));
+                                    res.Add (headings[c.ColumnIndex], (cellType, content, false));
                                 }
                             }
                         }

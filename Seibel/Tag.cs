@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-
 namespace SeibelCases.Seibel {
     public class Tag {
-        public string name { get; set; }
+        private string _name;
+        public string name { get => _name; set => _name = value.ToLower(); }
         public string locale { get; set; } = "en-GB";
-        public List<Tag> aliases { get; set; } = new List<Tag> ();
+
+        override public string ToString() => $"{name}";
     }
 }
