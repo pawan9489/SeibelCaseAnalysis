@@ -65,12 +65,6 @@ namespace SeibelCases
         {
             return "MERGE (" + nodeVariable + ":Product {name: \"" + product + "\"})";
         }
-        // public string MakeRelationshipBetween(string node1, string node2, string relationship, Dictionary<string, string> relationshipProps)
-        // {
-        //     return relationshipProps.Count == 0
-        //     ? "MERGE (" + node1 + ") -[:" + relationship + "]-> (" + node2 + ")"
-        //     : "MERGE (" + node1 + ") -[:" + relationship + " { " + string.Join(", ", relationshipProps.Select(kvp => $"{kvp.Key}: \"{kvp.Value}\"")) + "}]-> (" + node2 + ")";
-        // }
         public static string MergeRelationshipBetweenNodes(string node1, string node2, string relationship)
         {
             return "MERGE (" + node1 + ") -[:" + relationship + "]-> (" + node2 + ")";
@@ -145,7 +139,6 @@ namespace SeibelCases
                     // item.Key -> SR#
                     // item.Value -> [{tags, categoryAndConnectionType}]
                     var summary = AnalyzeSummary.SeibelSummary[item.Key].Replace("\\", " ");
-                    // System.Console.WriteLine($"{item.Key} :: {AnalyzeSummary.SeibelSummary[item.Key]}");
 
                     var tags = item.Value.SelectMany(csf => csf.tags.Select(tag => $"\"{tag}\"")); // ["ssp", "payment", "scheme", "annual"]
                     var catsWithConnectionType = item.Value.SelectMany(csf => csf.categoryAndConnectionType); // [ {"sick", ["payroll", "setup"]}, {"annual", ["DIRECT"]} ]
