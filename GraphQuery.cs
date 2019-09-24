@@ -33,21 +33,21 @@ namespace SeibelCases
         {
             return "MERGE (" + nodeVariable + ":Area {name: \"" + area + "\"})";
         }
-        public static string CreateCaseNode(string caseNo, string summary, string tags)
+        public static string CreateCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created)
         {
-            return "CREATE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+            return "CREATE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\")})";
         }
-        public static string CreateCaseNode(string caseNo, string summary, string tags, string nodeVariable)
+        public static string CreateCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created, string nodeVariable)
         {
-            return "CREATE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+            return "CREATE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\")})";
         }
-        public static string MergeCaseNode(string caseNo, string summary, string tags)
+        public static string MergeCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created)
         {
-            return "MERGE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+            return "MERGE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\")})";
         }
-        public static string MergeCaseNode(string caseNo, string summary, string tags, string nodeVariable)
+        public static string MergeCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created, string nodeVariable)
         {
-            return "MERGE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+            return "MERGE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\")})";
         }
         public static string MergeCategoryNode(string category, string aliases)
         {
@@ -138,14 +138,17 @@ namespace SeibelCases
                 {
                     // item.Key -> SR#
                     // item.Value -> [{tags, categoryAndConnectionType}]
-                    var summary = AnalyzeSummary.SeibelSummary[item.Key].Replace("\\", " ");
+                    var summary = AnalyzeSummary.SeibelSummary[item.Key]["summary"].Replace("\\", " ");
+                    var status = AnalyzeSummary.SeibelSummary[item.Key]["status"];
+                    var priority = AnalyzeSummary.SeibelSummary[item.Key]["priority"];
+                    var date_created = AnalyzeSummary.SeibelSummary[item.Key]["date created"];
 
                     var tags = item.Value.SelectMany(csf => csf.tags.Select(tag => $"\"{tag}\"")); // ["ssp", "payment", "scheme", "annual"]
                     var catsWithConnectionType = item.Value.SelectMany(csf => csf.categoryAndConnectionType); // [ {"sick", ["payroll", "setup"]}, {"annual", ["DIRECT"]} ]
 
                     var caseVariable = "case" + ++node_number;
                     caseDict.Add(item.Key, caseVariable);
-                    query.AppendLine(CreateCaseNode(item.Key, summary, string.Join(", ", tags), caseVariable));
+                    query.AppendLine(CreateCaseNode(item.Key, summary, string.Join(", ", tags), status, priority, date_created, caseVariable));
 
                     foreach (var cat in catsWithConnectionType)
                     {
@@ -169,7 +172,7 @@ namespace SeibelCases
                         }
                     }
                 }
-
+                // Console.WriteLine(areaCatQuery.ToString() + query.ToString());
                 graph.RunQuery(areaCatQuery.ToString() + query.ToString());
             }
         }

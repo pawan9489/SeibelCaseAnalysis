@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SeibelCases.Seibel;
+using System;
 
 namespace SeibelCases { 
     public class AnalyzeSummary {
-        public static Dictionary<string, string> SeibelSummary = new Dictionary<string, string>();
+        public static Dictionary<string, Dictionary<string, string>> SeibelSummary = new Dictionary<string, Dictionary<string, string>>();
         private static void TagASummary(Dictionary<string, List<CaseFormat>> dict, string seibelNumber, string summary, Product product) {
             // A Summary can belong to multiple Areas & multiple Categories
             foreach(var area in product.areas) {
@@ -65,16 +66,31 @@ namespace SeibelCases {
             var dict = new Dictionary<string, List<CaseFormat>>(); 
             foreach (var row in ExcelReader.GetColumnsOfEachRow (excel, sheetName, columnNames)) {
                 var summary = "";
+                var status = "";
+                var priority = "";
+                var date_created = "";
                 var seibelNumber = "";
+                var tempDict = new Dictionary<string, string>() {};
                 foreach (var item in row) {
                     var columnName = item.Key.ToLower();
                     if (columnName == "summary") {
                         summary = ExcelReader.CellToString (item.Value);
+                        tempDict.Add("summary", summary);
                     } else if (columnName == "sr#") {
                         seibelNumber = ExcelReader.CellToString (item.Value);
+                        tempDict.Add("sr#", seibelNumber);
+                    } else if (columnName == "date created") {
+                        date_created = DateTime.Parse(ExcelReader.CellToString (item.Value)).ToString("yyyy-MM-ddTHH:mm:ss.fff");
+                        tempDict.Add("date created", date_created);
+                    } else if (columnName == "status") {
+                        status = ExcelReader.CellToString (item.Value);
+                        tempDict.Add("status", status);
+                    } else if (columnName == "priority") {
+                        priority = ExcelReader.CellToString (item.Value);
+                        tempDict.Add("priority", priority);
                     }
                 }
-                SeibelSummary.Add(seibelNumber, summary); // Optional
+                SeibelSummary.Add(seibelNumber, tempDict); // Optional
                 TagASummary(dict, seibelNumber, summary, seibelJSON);
             }
             return dict;

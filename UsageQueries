@@ -1,0 +1,12 @@
+// Query Between Dates
+MATCH (sc:SeibelCase)-[:BELONGS_TO]->(:Category{umbrellaterm: 'sick'}) 
+WHERE sc.date_created >= datetime('2019-04-24T00:00:00') 
+	AND sc.date_created < datetime('2019-04-25T00:00:00')
+RETURN sc.sr, sc.summary, sc.date_created
+
+// Query Category Count
+MATCH (sc:SeibelCase)-[:BELONGS_TO]->(cat:Category)
+RETURN cat.umbrellaterm, COUNT(sc) 
+
+// Query Total Count
+MATCH (sc:SeibelCase) RETURN COUNT(sc)
