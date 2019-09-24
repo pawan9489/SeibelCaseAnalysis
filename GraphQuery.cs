@@ -25,35 +25,43 @@ namespace SeibelCases
                 session.Run(query);
             }
         }
-        public static string CreateAreaNode(string area)
+        public static string MergeAreaNode(string area)
         {
             return "MERGE (:Area {name: \"" + area + "\"})";
         }
-        public static string CreateAreaNode(string area, string nodeVariable)
+        public static string MergeAreaNode(string area, string nodeVariable)
         {
             return "MERGE (" + nodeVariable + ":Area {name: \"" + area + "\"})";
         }
         public static string CreateCaseNode(string caseNo, string summary, string tags)
         {
-            return "MERGE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+            return "CREATE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
         }
         public static string CreateCaseNode(string caseNo, string summary, string tags, string nodeVariable)
         {
+            return "CREATE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+        }
+        public static string MergeCaseNode(string caseNo, string summary, string tags)
+        {
+            return "MERGE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
+        }
+        public static string MergeCaseNode(string caseNo, string summary, string tags, string nodeVariable)
+        {
             return "MERGE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "]})";
         }
-        public static string CreateCategoryNode(string category, string aliases)
+        public static string MergeCategoryNode(string category, string aliases)
         {
             return "MERGE (:Category {umbrellaterm: \"" + category + "\", aliases: [" + aliases + "]})";
         }
-        public static string CreateCategoryNode(string category, string aliases, string nodeVariable)
+        public static string MergeCategoryNode(string category, string aliases, string nodeVariable)
         {
             return "MERGE (" + nodeVariable + ":Category {umbrellaterm: \"" + category + "\", aliases: [" + aliases + "]})";
         }
-        public static string CreateProductNode(string product)
+        public static string MergeProductNode(string product)
         {
             return "MERGE (:Product {name: \"" + product + "\"})";
         }
-        public static string CreateProductNode(string product, string nodeVariable)
+        public static string MergeProductNode(string product, string nodeVariable)
         {
             return "MERGE (" + nodeVariable + ":Product {name: \"" + product + "\"})";
         }
@@ -63,13 +71,21 @@ namespace SeibelCases
         //     ? "MERGE (" + node1 + ") -[:" + relationship + "]-> (" + node2 + ")"
         //     : "MERGE (" + node1 + ") -[:" + relationship + " { " + string.Join(", ", relationshipProps.Select(kvp => $"{kvp.Key}: \"{kvp.Value}\"")) + "}]-> (" + node2 + ")";
         // }
-        public static string MakeRelationshipBetweenNodes(string node1, string node2, string relationship)
+        public static string MergeRelationshipBetweenNodes(string node1, string node2, string relationship)
         {
             return "MERGE (" + node1 + ") -[:" + relationship + "]-> (" + node2 + ")";
         }
-        public static string MakeRelationshipBetweenNodesWithProps(string node1, string node2, string relationship, string relationshipProps)
+        public static string MergeRelationshipBetweenNodesWithProps(string node1, string node2, string relationship, string relationshipProps)
         {
             return "MERGE (" + node1 + ") -[:" + relationship + " { " + relationshipProps + "}]-> (" + node2 + ")";
+        }
+        public static string CreateRelationshipBetweenNodes(string node1, string node2, string relationship)
+        {
+            return "CREATE (" + node1 + ") -[:" + relationship + "]-> (" + node2 + ")";
+        }
+        public static string CreateRelationshipBetweenNodesWithProps(string node1, string node2, string relationship, string relationshipProps)
+        {
+            return "CREATE (" + node1 + ") -[:" + relationship + " { " + relationshipProps + "}]-> (" + node2 + ")";
         }
         public static void InsertData(
             string boltConnection,
@@ -78,7 +94,6 @@ namespace SeibelCases
             Dictionary<string, List<CaseFormat>> dictionary,
             Product seibelJSON)
         {
-            var insertForEvery = 100;
             var areaCatQuery = new StringBuilder();
             var query = new StringBuilder();
             var areasDict = new Dictionary<string, string>() { };
@@ -87,21 +102,21 @@ namespace SeibelCases
             var node_number = 0;
             using (var graph = new GraphQuery(boltConnection, username, password))
             {
-                areaCatQuery.AppendLine(CreateProductNode(seibelJSON.productName, "product"));
+                areaCatQuery.AppendLine(MergeProductNode(seibelJSON.productName, "product"));
                 foreach (var area in seibelJSON.areas)
                 {
                     var areaVariable = "area" + ++node_number;
                     areasDict.Add(area.area.ToLower(), areaVariable);
-                    areaCatQuery.AppendLine(CreateAreaNode(area.area, areaVariable));
-                    areaCatQuery.AppendLine(MakeRelationshipBetweenNodes(areaVariable, "product", "BELONGS_TO"));
+                    areaCatQuery.AppendLine(MergeAreaNode(area.area, areaVariable));
+                    areaCatQuery.AppendLine(MergeRelationshipBetweenNodes(areaVariable, "product", "BELONGS_TO"));
 
                     foreach (var cat in area.categories)
                     {
                         var aliases = string.Join(", ", cat.aliases.Select(alias => $"\"{alias}\""));
                         var catVariable = "cat" + ++node_number;
                         catsDict.Add(cat.umbrellaterm.ToLower(), catVariable);
-                        areaCatQuery.AppendLine(CreateCategoryNode(cat.umbrellaterm, aliases, catVariable));
-                        areaCatQuery.AppendLine(MakeRelationshipBetweenNodes(catVariable, areaVariable, "BELONGS_TO"));
+                        areaCatQuery.AppendLine(MergeCategoryNode(cat.umbrellaterm, aliases, catVariable));
+                        areaCatQuery.AppendLine(MergeRelationshipBetweenNodes(catVariable, areaVariable, "BELONGS_TO"));
                     }
                 }
 
@@ -125,16 +140,8 @@ namespace SeibelCases
                 //     "SR#": "Summary"
                 // }
 
-                var sr_count = 0;
-                var total_sr_count = dictionary.Count;
                 foreach (var item in dictionary)
                 {
-                    sr_count++;
-                    if (sr_count % insertForEvery == 0) {
-                        var q = areaCatQuery.AppendLine(query.ToString()).ToString();
-                        graph.RunQuery(q);
-                        query = new StringBuilder();
-                    }
                     // item.Key -> SR#
                     // item.Value -> [{tags, categoryAndConnectionType}]
                     var summary = AnalyzeSummary.SeibelSummary[item.Key].Replace("\\", " ");
@@ -152,7 +159,7 @@ namespace SeibelCases
                         var catVariable = catsDict[cat.Key];
                         if (cat.Value[0] == "DIRECT")
                         {
-                            query.AppendLine(MakeRelationshipBetweenNodes(
+                            query.AppendLine(CreateRelationshipBetweenNodes(
                                 caseVariable,
                                 catVariable,
                                 "BELONGS_TO"
@@ -160,7 +167,7 @@ namespace SeibelCases
                         }
                         else
                         {
-                            query.AppendLine(MakeRelationshipBetweenNodesWithProps(
+                            query.AppendLine(CreateRelationshipBetweenNodesWithProps(
                                 caseVariable,
                                 catVariable,
                                 "BELONGS_TO",
@@ -170,8 +177,7 @@ namespace SeibelCases
                     }
                 }
 
-                // graph.RunQuery(query.ToString());
-                graph.RunQuery(areaCatQuery.AppendLine(query.ToString()).ToString());
+                graph.RunQuery(areaCatQuery.ToString() + query.ToString());
             }
         }
     }
