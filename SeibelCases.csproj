@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.2-preview-56107813" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Neo4j.Driver" Version="1.7.2" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,18 @@
+Requirements
+    - JSON format
+        - Follow format.json
+        - Unique Umbrella names for Categories
+            - No Unique Contraint of Sub Categories across Categories
+        - No Sub Category with name "DIRECT"
+        - Aliases for Category has Word Boundary Checks
+            - Ex: The word "cOMPany" has "OMP" that doesn't mean it belongs to Parental
+            - Ex: The word "geOSPatial" has "OSP"
+        - Proper Aliases for Categories are Required (Keep Aliases as Definite Classification of Main Tag)
+            - Ex: "'Reject' as Alias to Main tag 'Request Leave'" != "Rejected Employee Payment"
+    - Excel format
+        - Must Contain "Summary" & "SR#" columns 
+        - Data must Contain in Sheet "Data From Siebel"
+
+    - Neo4J
+        - dbms.memory.heap.max_size=16G
+        - dbms.jvm.additional=-Xss2M

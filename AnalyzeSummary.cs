@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using SeibelCases.Seibel;
 
 namespace SeibelCases { 
@@ -29,7 +30,9 @@ namespace SeibelCases {
             var subCatList = new List<string>();
             foreach (var alias in category.aliases)
             {
-                if (ls.Contains(alias.name)){
+                string pattern = @"\b" + Regex.Escape(alias.name) + @"\b";
+                Regex regex = new Regex(pattern,RegexOptions.IgnoreCase);
+                if (regex.IsMatch(ls)){
                     fitsToCategory = true;
                     caseFormat.tags.Add(alias.name);
                 }
@@ -37,7 +40,9 @@ namespace SeibelCases {
             if (fitsToCategory) {
                 foreach(var subcat in category.subcategories) {
                     foreach(var subAlias in subcat.aliases) {
-                        if (ls.Contains(subAlias.name)) {
+                        string pattern = @"\b" + Regex.Escape(subAlias.name) + @"\b";
+                        Regex regex = new Regex(pattern,RegexOptions.IgnoreCase);
+                        if (regex.IsMatch(ls)) {
                             hasSubCat = true;
                             caseFormat.tags.Add(subAlias.name);
                         }
@@ -56,8 +61,7 @@ namespace SeibelCases {
             => productArea.categories
                 .Select(category => TagASummaryToCategory(summary, category))
                 .Where(caseFormat => caseFormat.categoryAndConnectionType.Count != 0);
-        public static Dictionary<string, List<CaseFormat>> Analyze(string excel, string formatJSON, string sheetName, List<string> columnNames) {
-            var seibelJSON = JsonReader.ParseJsonToProduct (formatJSON);
+        public static Dictionary<string, List<CaseFormat>> Analyze(string excel, Product seibelJSON, string sheetName, List<string> columnNames) {
             var dict = new Dictionary<string, List<CaseFormat>>(); 
             foreach (var row in ExcelReader.GetColumnsOfEachRow (excel, sheetName, columnNames)) {
                 var summary = "";
