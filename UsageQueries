@@ -1,8 +1,15 @@
 // Query Between Dates
 MATCH (sc:SeibelCase)-[:BELONGS_TO]->(:Category{umbrellaterm: 'sick'}) 
 WHERE sc.date_created >= datetime('2019-04-24T00:00:00') 
-	AND sc.date_created < datetime('2019-04-25T00:00:00')
+	AND sc.date_created <= datetime('2019-04-25T23:59:59')
 RETURN sc.sr, sc.summary, sc.date_created
+
+// Query with Sub-Category
+MATCH (sc:SeibelCase)-[rel:BELONGS_TO]->(:Category{umbrellaterm: 'sick'}) 
+WHERE sc.date_created >= datetime('2019-04-01T00:00:00') 
+	AND sc.date_created <= datetime('2019-04-30T23:59:59')
+    AND "setup" in rel.subCategories
+RETURN sc.sr, sc.summary, sc.date_created, rel
 
 // Query Category Count
 MATCH (sc:SeibelCase)-[:BELONGS_TO]->(cat:Category)

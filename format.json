@@ -66,6 +66,10 @@
                             "umbrellaterm": "Setup",
                             "aliases": [
                                 {
+                                    "name": "setup",
+                                    "locale": "en-GB"
+                                },
+                                {
                                     "name": "type",
                                     "locale": "en-GB"
                                 },
@@ -119,6 +123,10 @@
                             "umbrellaterm": "Setup",
                             "aliases": [
                                 {
+                                    "name": "setup",
+                                    "locale": "en-GB"
+                                },
+                                {
                                     "name": "type",
                                     "locale": "en-GB"
                                 },
@@ -128,6 +136,27 @@
                                 },
                                 {
                                     "name": "package",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Approvals & Rejections",
+                            "aliases": [
+                                {
+                                    "name": "approve",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "reject",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "approval",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "rejection",
                                     "locale": "en-GB"
                                 }
                             ]
@@ -142,19 +171,33 @@
                             "locale": "en-GB"
                         },
                         {
-                            "name": "approv",
-                            "locale": "en-GB"
-                        },
-                        {
-                            "name": "reject",
-                            "locale": "en-GB"
-                        },
-                        {
                             "name": "request log",
                             "locale": "en-GB"
                         }
                     ],
-                    "subcategories": []
+                    "subcategories": [
+                        {
+                            "umbrellaterm": "Approvals & Rejections",
+                            "aliases": [
+                                {
+                                    "name": "approve",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "reject",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "approval",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "rejection",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     "umbrellaterm": "Parental",
@@ -217,6 +260,10 @@
                         {
                             "umbrellaterm": "Setup",
                             "aliases": [
+                                {
+                                    "name": "setup",
+                                    "locale": "en-GB"
+                                },
                                 {
                                     "name": "type",
                                     "locale": "en-GB"
@@ -300,6 +347,131 @@
                         }
                     ],
                     "subcategories": []
+                },
+                {
+                    "umbrellaterm": "Time and Attendance",
+                    "aliases": [
+                        {
+                            "name": "Tna",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "t&a",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "timecard",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "timecards",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "timecode",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "timecodes",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": []
+                },
+                {
+                    "umbrellaterm": "Timesheets",
+                    "aliases": [
+                        {
+                            "name": "timesheet",
+                            "locale": "en-GB"
+                        }
+                    ],
+                    "subcategories": [
+                        {
+                            "umbrellaterm": "Payment",
+                            "aliases": [
+                                {
+                                    "name": "Payment",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "payroll",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "PDE",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "pay data",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "pass to balances",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "balances",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Setup",
+                            "aliases": [
+                                {
+                                    "name": "setup",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "type",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Approvals & Rejections",
+                            "aliases": [
+                                {
+                                    "name": "approve",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "reject",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "approval",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "rejection",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        },
+                        {
+                            "umbrellaterm": "Park & Unpark",
+                            "aliases": [
+                                {
+                                    "name": "park",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "parking",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "unpark",
+                                    "locale": "en-GB"
+                                },
+                                {
+                                    "name": "unparking",
+                                    "locale": "en-GB"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
