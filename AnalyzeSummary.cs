@@ -75,7 +75,7 @@ namespace SeibelCases {
                     var columnName = item.Key.ToLower();
                     if (columnName == "summary") {
                         summary = ExcelReader.CellToString (item.Value);
-                        tempDict.Add("summary", summary);
+                        tempDict.Add("summary", new string(summary.Where(c => !char.IsPunctuation(c)).ToArray()));
                     } else if (columnName == "sr#") {
                         seibelNumber = ExcelReader.CellToString (item.Value);
                         tempDict.Add("sr#", seibelNumber);

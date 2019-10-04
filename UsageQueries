@@ -17,3 +17,8 @@ RETURN cat.umbrellaterm, COUNT(sc)
 
 // Query Total Count
 MATCH (sc:SeibelCase) RETURN COUNT(sc)
+
+MATCH (sc:SeibelCase)-[rel:BELONGS_TO]->(cat:Category)-[:BELONGS_TO]->(area:Area{name: 'leave and absence'})
+WHERE sc.date_created >= datetime('2019-03-24T00:00:00') 
+	AND sc.date_created <= datetime('2019-05-25T23:59:59')
+RETURN area.name as Area , cat.umbrellaterm as Category, rel.subCategories as Subcategories, sc.sr as CaseNumber, sc.summary as Summary, sc.date_created as DateCreated
