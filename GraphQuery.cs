@@ -33,13 +33,13 @@ namespace SeibelCases
         {
             return "MERGE (" + nodeVariable + ":Area {name: \"" + area + "\"})";
         }
-        public static string CreateCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created)
+        public static string CreateCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created, string group, string product_name, string original_product_name)
         {
-            return "CREATE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\")})";
+            return "CREATE (:SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\"), group: \"" + group + "\", product_name: \"" + product_name + "\", original_product_name: \"" + original_product_name + "\"})";
         }
-        public static string CreateCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created, string nodeVariable)
+        public static string CreateCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created, string group, string product_name, string original_product_name, string nodeVariable)
         {
-            return "CREATE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\")})";
+            return "CREATE (" + nodeVariable + ":SeibelCase {sr: \"" + caseNo + "\", summary: \"" + summary + "\", tags: [" + tags + "], status: \"" + status + "\", priority: \"" + priority + "\", date_created: datetime(\"" + date_created + "\"), group: \"" + group + "\", product_name: \"" + product_name + "\", original_product_name: \"" + original_product_name + "\"})";
         }
         public static string MergeCaseNode(string caseNo, string summary, string tags, string status, string priority, string date_created)
         {
@@ -142,13 +142,16 @@ namespace SeibelCases
                     var status = AnalyzeSummary.SeibelSummary[item.Key]["status"];
                     var priority = AnalyzeSummary.SeibelSummary[item.Key]["priority"];
                     var date_created = AnalyzeSummary.SeibelSummary[item.Key]["date created"];
+                    var group = AnalyzeSummary.SeibelSummary[item.Key]["group"];
+                    var product_name = AnalyzeSummary.SeibelSummary[item.Key]["product name"];
+                    var original_product_name = AnalyzeSummary.SeibelSummary[item.Key]["original product name"];
 
                     var tags = item.Value.SelectMany(csf => csf.tags.Select(tag => $"\"{tag}\"")); // ["ssp", "payment", "scheme", "annual"]
                     var catsWithConnectionType = item.Value.SelectMany(csf => csf.categoryAndConnectionType); // [ {"sick", ["payroll", "setup"]}, {"annual", ["DIRECT"]} ]
 
                     var caseVariable = "case" + ++node_number;
                     caseDict.Add(item.Key, caseVariable);
-                    query.AppendLine(CreateCaseNode(item.Key, summary, string.Join(", ", tags), status, priority, date_created, caseVariable));
+                    query.AppendLine(CreateCaseNode(item.Key, summary, string.Join(", ", tags), status, priority, date_created, group, product_name, original_product_name, caseVariable));
 
                     foreach (var cat in catsWithConnectionType)
                     {
@@ -172,8 +175,8 @@ namespace SeibelCases
                         }
                     }
                 }
-                // Console.WriteLine(areaCatQuery.ToString() + query.ToString());
-                graph.RunQuery(areaCatQuery.ToString() + query.ToString());
+                Console.WriteLine(areaCatQuery.ToString() + query.ToString());
+                // graph.RunQuery(areaCatQuery.ToString() + query.ToString());
             }
         }
     }

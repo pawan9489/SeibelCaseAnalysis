@@ -6,7 +6,7 @@ using System.Linq;
 namespace SeibelCases {
     class Program {
         static void Main (string[] args) {
-            var excel = Path.Combine(Directory.GetCurrentDirectory(), @"Excel\lna.xlsx");
+            var excel = Path.Combine(Directory.GetCurrentDirectory(), @"Excel\Cases_List_from_Apr_2019.xlsx");
             var formatJSON = Path.Combine(Directory.GetCurrentDirectory(), @"format.json");
             var seibelJSON = JsonReader.ParseJsonToProduct (formatJSON);
             var dictionary = AnalyzeSummary.Analyze(
@@ -18,7 +18,9 @@ namespace SeibelCases {
                         "Summary",
                         "Date Created",
                         "Status",
-                        "Priority"
+                        "Priority",
+                        "Group",
+                        "Product Name"
                     }
                 );
             GraphQuery.InsertData("bolt://localhost:7687", "neo4j", "test", dictionary, seibelJSON);

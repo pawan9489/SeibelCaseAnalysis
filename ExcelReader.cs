@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -74,19 +75,35 @@ namespace SeibelCases {
                         }
                     } else if (!IsEmpty (row)) {
                         var res = new Dictionary <string, (CellType, DateOrDoubleOrString, bool) > ();
+                        var addedColumns = new List<int>();
                         for (IEnumerator cit = row.GetEnumerator (); cit.MoveNext ();) {
                             ICell c = (ICell) cit.Current;
                             if (columnIndexesToCollectData.Contains (c.ColumnIndex)) {
                                 var (cellType, content) = ExcelReader.ParseCellContent (c);
-                                if (cellType == NPOI.SS.UserModel.CellType.Numeric) {
+                                if (cellType == NPOI.SS.UserModel.CellType.Numeric) 
+                                {
+                                    addedColumns.Add(c.ColumnIndex);
                                     if (DateUtil.IsCellDateFormatted (c))
                                         res.Add(headings[c.ColumnIndex], (cellType, content, true));
                                     else
                                         res.Add(headings[c.ColumnIndex], (cellType, content, false));
-                                } else if (cellType == NPOI.SS.UserModel.CellType.String) {
+                                } 
+                                else if (cellType == NPOI.SS.UserModel.CellType.String) 
+                                {
+                                    addedColumns.Add(c.ColumnIndex);
                                     res.Add (headings[c.ColumnIndex], (cellType, content, false));
+                                } 
+                                else 
+                                {
+                                    // If any other type of Cell appears // TODO
                                 }
                             }
+                        }
+                        foreach (var missedItem in columnIndexesToCollectData.Except(addedColumns))
+                        {
+                            var d = new DateOrDoubleOrString();
+                            d.str = "";
+                            res.Add (headings[missedItem], (NPOI.SS.UserModel.CellType.String, d, false));
                         }
                         yield return res;
                     }

@@ -70,9 +70,11 @@ namespace SeibelCases {
                 var priority = "";
                 var date_created = "";
                 var seibelNumber = "";
+                var group = "";
+                var product_name = "";
                 var tempDict = new Dictionary<string, string>() {};
                 foreach (var item in row) {
-                    var columnName = item.Key.ToLower();
+                    var columnName = item.Key.ToLower().Trim();
                     if (columnName == "summary") {
                         summary = ExcelReader.CellToString (item.Value);
                         tempDict.Add("summary", new string(summary.Where(c => !char.IsPunctuation(c)).ToArray()));
@@ -88,6 +90,24 @@ namespace SeibelCases {
                     } else if (columnName == "priority") {
                         priority = ExcelReader.CellToString (item.Value);
                         tempDict.Add("priority", priority);
+                    } else if (columnName == "group") {
+                        group = ExcelReader.CellToString (item.Value);
+                        tempDict.Add("group", group);
+                    } else if (columnName == "product name") {
+                        product_name = ExcelReader.CellToString (item.Value);
+                        tempDict.Add("original product name", product_name);
+                        if (product_name.IndexOf("ihcm2", StringComparison.OrdinalIgnoreCase) >= 0) 
+                        {
+                            tempDict.Add("product name", "iHCM2");
+                        } 
+                        else if (product_name.IndexOf("ihcm", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            tempDict.Add("product name", "iHCM-UK");
+                        } 
+                        else 
+                        {
+                            tempDict.Add("product name", "");
+                        }
                     }
                 }
                 SeibelSummary.Add(seibelNumber, tempDict); // Optional

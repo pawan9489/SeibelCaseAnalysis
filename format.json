@@ -173,6 +173,14 @@
                         {
                             "name": "request log",
                             "locale": "en-GB"
+                        },
+                        {
+                            "name": "approve leave",
+                            "locale": "en-GB"
+                        },
+                        {
+                            "name": "leave",
+                            "locale": "en-GB"
                         }
                     ],
                     "subcategories": [

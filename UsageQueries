@@ -22,3 +22,16 @@ MATCH (sc:SeibelCase)-[rel:BELONGS_TO]->(cat:Category)-[:BELONGS_TO]->(area:Area
 WHERE sc.date_created >= datetime('2019-03-24T00:00:00') 
 	AND sc.date_created <= datetime('2019-05-25T23:59:59')
 RETURN area.name as Area , cat.umbrellaterm as Category, rel.subCategories as Subcategories, sc.sr as CaseNumber, sc.summary as Summary, sc.date_created as DateCreated
+
+MATCH (sc:SeibelCase)-[rel:BELONGS_TO]->(cat:Category)-[:BELONGS_TO]->(area:Area{name: 'leave and absence'})
+RETURN 
+area.name as Area 
+, cat.umbrellaterm as Category
+, rel.subCategories as Subcategories
+, sc.sr as CaseNumber
+, sc.summary as Summary
+, sc.date_created.day + "/" + sc.date_created.month + "/" + sc.date_created.year as DateCreated
+, sc.group as Group
+, sc.product_name as ProductName
+, sc.original_product_name as OriginalProductName
+limit 10
